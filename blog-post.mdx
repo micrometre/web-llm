@@ -120,6 +120,16 @@ You can verify it's working at `chrome://gpu` — look for "WebGPU: Hardware acc
 
 On my Intel Iris Xe integrated GPU, I get around **10-15 tokens/second** with the Llama 3.2 1B model. With a dedicated GPU, you can expect significantly better performance.
 
+### Tested Environment
+
+| Component | Version |
+|-----------|--------|
+| OS | Ubuntu 24.04 LTS |
+| GPU | Intel Iris Xe Graphics |
+| WebGPU Backend | Vulkan |
+| Browser | Chrome 143+ |
+| Model | Qwen2.5 0.5B (q4f32) |
+
 > **Tip:** Use `q4f32` (32-bit float) models instead of `q4f16` for better compatibility with Intel and integrated GPUs. The 16-bit models can cause shader compilation errors on some hardware.
 
 The first load downloads the model (250MB - 1.5GB depending on the model), but subsequent loads are nearly instant thanks to OPFS caching.

@@ -111,6 +111,16 @@ browser-slm-chat/
 - [`@mlc-ai/web-llm`](https://github.com/mlc-ai/web-llm) — WebGPU-accelerated LLM inference
 - [`vite`](https://vitejs.dev/) — Fast build tool and dev server
 
+## 🧪 Tested Environment
+
+This project has been tested and verified on:
+
+- **OS:** Ubuntu 24.04 LTS (Noble Numbat)
+- **GPU:** Intel Iris Xe Graphics
+- **Backend:** Vulkan
+- **Browser:** Chrome 143+
+- **Model:** Qwen2.5 0.5B (q4f32)
+
 ## 🌐 Browser Compatibility
 
 | Browser | Status |
