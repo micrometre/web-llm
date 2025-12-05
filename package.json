@@ -1,0 +1,17 @@
+{
+  "name": "browser-slm-chat",
+  "version": "1.0.0",
+  "description": "Browser-only Small Language Model chat using WebLLM with OPFS caching",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mlc-ai/web-llm": "^0.2.74"
+  },
+  "devDependencies": {
+    "vite": "^5.4.11"
+  }
+}

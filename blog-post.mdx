@@ -1,0 +1,140 @@
+---
+title: "Running AI Models Directly in Your Browser with WebLLM"
+description: "Learn how to build a 100% client-side AI chat application using WebLLM and WebGPU - no server required!"
+pubDate: 2024-12-05
+tags: ["ai", "webgpu", "javascript", "tutorial"]
+---
+
+# Running AI Models Directly in Your Browser with WebLLM
+
+What if I told you that you can run a fully functional AI chatbot **entirely in your browser** — no API keys, no server, no data leaving your device? Thanks to WebGPU and WebLLM, this is now possible.
+
+In this post, I'll walk you through how I built a browser-based Small Language Model (SLM) chat application that runs 100% client-side.
+
+## The Problem with Traditional AI APIs
+
+Most AI applications today rely on cloud APIs:
+
+- 💸 **Cost** — API calls add up quickly
+- 🔐 **Privacy** — Your data goes to third-party servers
+- 🌐 **Connectivity** — No internet = no AI
+- ⏱️ **Latency** — Network round-trips slow things down
+
+What if we could eliminate all of these issues?
+
+## Enter WebGPU and WebLLM
+
+**WebGPU** is the successor to WebGL, providing low-level GPU access in the browser. It's now available in Chrome 113+ and Edge 113+.
+
+**WebLLM** is a project by MLC AI that compiles Large Language Models to run directly in the browser using WebGPU acceleration. It supports popular models like:
+
+- Qwen 2.5 (1.5B - 7B)
+- Phi-3.5 Mini
+- Gemma 2
+- Llama 3
+- And many more!
+
+## Building the Chat App
+
+Let's build a simple chat interface. First, set up a new Vite project:
+
+```bash
+npm create vite@latest browser-slm-chat
+cd browser-slm-chat
+npm install @mlc-ai/web-llm
+```
+
+### The Key Code
+
+Here's the core logic to initialize WebLLM:
+
+```javascript
+import * as webllm from '@mlc-ai/web-llm';
+
+// Create the engine with progress tracking
+const engine = await webllm.CreateMLCEngine(
+  "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
+  {
+    initProgressCallback: (progress) => {
+      console.log(`Loading: ${progress.text} - ${Math.round(progress.progress * 100)}%`);
+    }
+  }
+);
+
+// Chat with the model
+const response = await engine.chat.completions.create({
+  messages: [{ role: "user", content: "Hello!" }],
+  stream: true, // Enable streaming
+});
+
+for await (const chunk of response) {
+  const content = chunk.choices[0]?.delta?.content || '';
+  process.stdout.write(content);
+}
+```
+
+That's it! The model downloads once (cached in OPFS), and subsequent loads are instant.
+
+### Important: CORS Headers
+
+For WebGPU features, add these headers in your `vite.config.js`:
+
+```javascript
+export default defineConfig({
+  server: {
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+  },
+});
+```
+
+## Enabling WebGPU
+
+If WebGPU isn't working, you may need to enable it in Chrome:
+
+1. Go to `chrome://flags`
+2. Search for `#enable-unsafe-webgpu`
+3. Set to **Enabled**
+4. Relaunch Chrome
+
+You can verify it's working at `chrome://gpu` — look for "WebGPU: Hardware accelerated".
+
+## Performance Expectations
+
+On my Intel Iris Xe integrated GPU, I get around **10-15 tokens/second** with the Qwen 1.5B model. With a dedicated GPU, you can expect significantly better performance.
+
+The first load downloads the model (700MB - 2GB depending on the model), but subsequent loads are nearly instant thanks to OPFS caching.
+
+## Why This Matters
+
+This technology opens up exciting possibilities:
+
+- **Privacy-first AI apps** — Sensitive data never leaves the device
+- **Offline AI** — Works without internet after initial download
+- **Zero infrastructure** — No servers to maintain or pay for
+- **Edge computing** — AI processing at the edge, not the cloud
+
+## Try It Yourself
+
+I've open-sourced the complete project on GitHub:
+
+👉 [Browser SLM Chat on GitHub](https://github.com/henok/browser-slm-chat)
+
+Clone it, run `npm install && npm run dev`, and you'll have your own browser-based AI chat running in minutes.
+
+## What's Next?
+
+The browser AI ecosystem is evolving rapidly. We're seeing:
+
+- Smaller, more efficient models optimized for edge devices
+- Better quantization techniques (4-bit models!)
+- Improved WebGPU support across browsers
+- New APIs like the [Prompt API](https://developer.chrome.com/docs/ai/built-in) for built-in browser AI
+
+The future of AI isn't just in the cloud — it's running right in your browser.
+
+---
+
+*Have questions or built something cool with WebLLM? Let me know in the comments!*

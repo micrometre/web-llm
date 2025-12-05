@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browser SLM Chat - WebLLM</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🧠 Browser SLM Chat</h1>
+        <p class="subtitle">Powered by WebLLM • Runs 100% in your browser</p>
+      </header>
+
+      <div class="model-controls">
+        <div class="model-selector">
+          <label for="model-select">Select Model:</label>
+          <select id="model-select">
+            <option value="Qwen2.5-1.5B-Instruct-q4f16_1-MLC">Qwen2.5 1.5B (Recommended)</option>
+            <option value="Phi-3.5-mini-instruct-q4f16_1-MLC">Phi-3.5 Mini 3.8B</option>
+            <option value="gemma-2-2b-it-q4f16_1-MLC">Gemma 2 2B</option>
+            <option value="SmolLM2-1.7B-Instruct-q4f16_1-MLC">SmolLM2 1.7B</option>
+            <option value="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC">TinyLlama 1.1B (Smallest)</option>
+          </select>
+        </div>
+        <button id="load-btn" class="btn btn-primary">Load Model</button>
+        <button id="unload-btn" class="btn btn-secondary" disabled>Unload</button>
+      </div>
+
+      <div id="progress-container" class="progress-container hidden">
+        <div class="progress-info">
+          <span id="progress-text">Initializing...</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div id="gpu-info" class="gpu-info"></div>
+
+      <div class="chat-container">
+        <div id="chat-messages" class="chat-messages">
+          <div class="welcome-message">
+            <p>👋 Welcome! Select a model and click <strong>Load Model</strong> to start chatting.</p>
+            <p class="note">Models are cached in OPFS after first download for faster loading next time.</p>
+          </div>
+        </div>
+
+        <form id="chat-form" class="chat-input-container">
+          <textarea
+            id="user-input"
+            placeholder="Type your message..."
+            rows="1"
+            disabled
+          ></textarea>
+          <button type="submit" id="send-btn" class="btn btn-primary" disabled>
+            Send
+          </button>
+        </form>
+      </div>
+
+      <div class="stats-bar">
+        <span id="stats-text">No model loaded</span>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
