@@ -53,6 +53,16 @@ header h1 {
   font-size: 0.9rem;
 }
 
+.subtitle a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.subtitle a:hover {
+  text-decoration: underline;
+  color: var(--accent-hover);
+}
+
 /* Model Controls */
 .model-controls {
   display: flex;

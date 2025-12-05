@@ -18,11 +18,12 @@ A **100% browser-based** Small Language Model (SLM) chat application powered by 
 
 | Model | Size | Description |
 |-------|------|-------------|
-| **Qwen2.5 1.5B** | ~1GB | Recommended - great balance of speed and quality |
-| **Phi-3.5 Mini** | ~2.3GB | Microsoft's capable small model |
-| **Gemma 2 2B** | ~1.5GB | Google's efficient model |
-| **SmolLM2 1.7B** | ~1GB | Hugging Face's compact model |
-| **TinyLlama 1.1B** | ~700MB | Smallest and fastest option |
+| **Llama 3.2 1B** | ~700MB | Recommended - Meta's latest small model |
+| **Qwen2.5 0.5B** | ~400MB | Fastest option - great for quick responses |
+| **Qwen2.5 1.5B** | ~1GB | Good balance of speed and quality |
+| **SmolLM2 360M** | ~250MB | Tiny model for basic tasks |
+| **TinyLlama 1.1B** | ~700MB | Compact and efficient |
+| **Gemma 2 2B** | ~1.5GB | Google's capable model |
 
 ## 🚀 Quick Start
 
@@ -66,10 +67,18 @@ If you see "No WebGPU adapter found", you need to enable WebGPU in Chrome:
 3. Set it to **Enabled**
 4. Click **Relaunch**
 
-### Option 2: Launch Chrome with Flags
+### Option 2: Launch Chrome with Flags (Recommended for Linux)
 
 ```bash
-google-chrome --enable-unsafe-webgpu --enable-features=Vulkan http://localhost:5173
+google-chrome --enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan http://localhost:5173
+```
+
+### Option 3: If You Get Shader Errors
+
+If you see errors like `GPUPipelineError: Invalid ShaderModule`, try launching with OpenGL:
+
+```bash
+google-chrome --enable-unsafe-webgpu --use-angle=gl http://localhost:5173
 ```
 
 ### Verify WebGPU Status

@@ -28,10 +28,10 @@ What if we could eliminate all of these issues?
 
 **WebLLM** is a project by MLC AI that compiles Large Language Models to run directly in the browser using WebGPU acceleration. It supports popular models like:
 
-- Qwen 2.5 (1.5B - 7B)
-- Phi-3.5 Mini
-- Gemma 2
-- Llama 3
+- Llama 3.2 (1B - 3B)
+- Qwen 2.5 (0.5B - 7B)
+- Gemma 2 (2B)
+- SmolLM2 (360M - 1.7B)
 - And many more!
 
 ## Building the Chat App
@@ -52,8 +52,9 @@ Here's the core logic to initialize WebLLM:
 import * as webllm from '@mlc-ai/web-llm';
 
 // Create the engine with progress tracking
+// Note: Use q4f32 models for better compatibility with Intel/integrated GPUs
 const engine = await webllm.CreateMLCEngine(
-  "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
+  "Llama-3.2-1B-Instruct-q4f32_1-MLC",
   {
     initProgressCallback: (progress) => {
       console.log(`Loading: ${progress.text} - ${Math.round(progress.progress * 100)}%`);
@@ -99,13 +100,29 @@ If WebGPU isn't working, you may need to enable it in Chrome:
 3. Set to **Enabled**
 4. Relaunch Chrome
 
+### Linux Users: Launch with Vulkan
+
+On Linux, you may need to explicitly enable the Vulkan backend:
+
+```bash
+google-chrome --enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan http://localhost:5173
+```
+
+If you encounter shader errors (`GPUPipelineError`), try the OpenGL backend instead:
+
+```bash
+google-chrome --enable-unsafe-webgpu --use-angle=gl http://localhost:5173
+```
+
 You can verify it's working at `chrome://gpu` — look for "WebGPU: Hardware accelerated".
 
 ## Performance Expectations
 
-On my Intel Iris Xe integrated GPU, I get around **10-15 tokens/second** with the Qwen 1.5B model. With a dedicated GPU, you can expect significantly better performance.
+On my Intel Iris Xe integrated GPU, I get around **10-15 tokens/second** with the Llama 3.2 1B model. With a dedicated GPU, you can expect significantly better performance.
 
-The first load downloads the model (700MB - 2GB depending on the model), but subsequent loads are nearly instant thanks to OPFS caching.
+> **Tip:** Use `q4f32` (32-bit float) models instead of `q4f16` for better compatibility with Intel and integrated GPUs. The 16-bit models can cause shader compilation errors on some hardware.
+
+The first load downloads the model (250MB - 1.5GB depending on the model), but subsequent loads are nearly instant thanks to OPFS caching.
 
 ## Why This Matters
 
@@ -120,7 +137,7 @@ This technology opens up exciting possibilities:
 
 I've open-sourced the complete project on GitHub:
 
-👉 [Browser SLM Chat on GitHub](https://github.com/henok/browser-slm-chat)
+👉 [Browser SLM Chat on GitHub](https://github.com/micrometre/web-llm/tree/master)
 
 Clone it, run `npm install && npm run dev`, and you'll have your own browser-based AI chat running in minutes.
 
