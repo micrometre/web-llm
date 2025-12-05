@@ -16,13 +16,13 @@ preview:
 install:
 	npm install
 
-# Launch Chrome with WebGPU + Vulkan (recommended for Linux)
+# Launch Chrome with WebGPU + Vulkan on X11 (recommended for Linux)
 chrome:
-	google-chrome --enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan http://localhost:5173
+	google-chrome --enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan --ozone-platform=x11 http://localhost:5173
 
 # Launch Chrome with WebGPU + OpenGL (fallback if Vulkan has shader errors)
 chrome-gl:
-	google-chrome --enable-unsafe-webgpu --use-angle=gl http://localhost:5173
+	google-chrome --enable-unsafe-webgpu --use-angle=gl --ozone-platform=x11 http://localhost:5173
 
 # Deploy to Vercel
 deploy:
