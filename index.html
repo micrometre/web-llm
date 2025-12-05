@@ -4,6 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Browser SLM Chat - WebLLM</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Run AI models directly in your browser using WebGPU - 100% private, no server required">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SLM Chat">
+    
+    <!-- PWA Manifest & Icons -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
@@ -13,6 +26,7 @@
         <p class="subtitle">
           Powered by WebLLM • Runs 100% in your browser • 
           <a href="https://github.com/micrometre/web-llm/tree/master" target="_blank" rel="noopener">Source Code</a>
+          <button id="install-btn" class="install-btn hidden">📲 Install App</button>
         </p>
       </header>
 
@@ -71,5 +85,41 @@
     </div>
 
     <script type="module" src="/src/main.js"></script>
+    
+    <!-- Register Service Worker & PWA Install -->
+    <script>
+      // Service Worker Registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((reg) => console.log('[PWA] Service Worker registered'))
+            .catch((err) => console.log('[PWA] Service Worker registration failed:', err));
+        });
+      }
+
+      // PWA Install Prompt
+      let deferredPrompt;
+      const installBtn = document.getElementById('install-btn');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.classList.remove('hidden');
+      });
+
+      installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('[PWA] Install outcome:', outcome);
+        deferredPrompt = null;
+        installBtn.classList.add('hidden');
+      });
+
+      window.addEventListener('appinstalled', () => {
+        console.log('[PWA] App installed');
+        installBtn.classList.add('hidden');
+      });
+    </script>
   </body>
 </html>
