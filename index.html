@@ -34,12 +34,23 @@
         <div class="model-selector">
           <label for="model-select">Select Model:</label>
           <select id="model-select">
+            <!-- Tiny Models (< 500M) - Best for low-end devices -->
+            <option value="SmolLM2-360M-Instruct-q4f32_1-MLC">SmolLM2 360M (Tiny, ~200MB)</option>
             <option value="Qwen2.5-0.5B-Instruct-q4f32_1-MLC">Qwen2.5 0.5B (Fastest) ✓</option>
-            <option value="Llama-3.2-1B-Instruct-q4f32_1-MLC">Llama 3.2 1B (Recommended)</option>
-            <option value="Qwen2.5-1.5B-Instruct-q4f32_1-MLC">Qwen2.5 1.5B</option>
-            <option value="SmolLM2-360M-Instruct-q4f32_1-MLC">SmolLM2 360M (Tiny)</option>
+            
+            <!-- Small Models (1B) - Good balance for mobile -->
+            <option value="gemma-3-1b-it-q4f32_1-MLC">Gemma 3 1B (Mobile Optimized) 🚀</option>
+            <option value="Llama-3.2-1B-Instruct-q4f32_1-MLC" selected>Llama 3.2 1B (Recommended)</option>
             <option value="TinyLlama-1.1B-Chat-v1.0-q4f32_1-MLC">TinyLlama 1.1B</option>
+            
+            <!-- Medium Models (1.5B-2B) -->
+            <option value="Qwen2.5-1.5B-Instruct-q4f32_1-MLC">Qwen2.5 1.5B</option>
             <option value="gemma-2-2b-it-q4f32_1-MLC">Gemma 2 2B</option>
+            
+            <!-- Larger Models (3B+) - Requires 4GB+ RAM -->
+            <option value="Phi-3.5-mini-instruct-q4f32_1-MLC">Phi-3.5 Mini 3.8B (Microsoft)</option>
+            <option value="Llama-3.2-3B-Instruct-q4f32_1-MLC">Llama 3.2 3B</option>
+            <option value="Mistral-7B-Instruct-v0.3-q4f32_1-MLC">Mistral 7B (8GB+ RAM)</option>
           </select>
         </div>
         <button id="load-btn" class="btn btn-primary">Load Model</button>
